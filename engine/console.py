@@ -2,14 +2,14 @@ import sys
 import tkinter as tk
 from tkinter import ttk
 import numpy as np
+import time
 
 
 if __name__ == '__main__': 
-    pass
-    from math_lib import Create_sinuosidal_wave, Set_frequency_sampling, Set_time
+    from math_lib import Sinuosidal_wave
 else:
     pass
-    from .math_lib import Create_sinuosidal_wave, Set_frequency_sampling, Set_time
+    from .math_lib import Sinuosidal_wave, Set_frequency_sampling, Set_time
 
 import matplotlib.pyplot as plt
 # from matplotlib import animation
@@ -24,7 +24,7 @@ class SignalsGUI:
         self.root = root
         self.root.title("Sinusoidal Wave Generator")
 
-        # Create left and right space
+        # Create left and right frame
         self.left_frame = tk.Frame(self.root)
         self.left_frame.grid(row=0, column=0, padx=(0, 10), sticky="nsew")
         self.right_frame = tk.Frame(self.root)
@@ -85,7 +85,7 @@ class SignalsGUI:
         [self.left_frame.grid_slaves()[0].destroy() for _ in range(4)  if last_line > 11]
 
 
-    def get_data_for_plot(self):
+    def get_data_from_symbol_for_plot(self):
         self.frequencies = [int(float(entry.get())) for entry in self.left_frame.grid_slaves() if isinstance(entry, tk.Entry) and entry.grid_info()['column'] == 1][:-2][::-1]
         self.amplitudes = [float(entry.get()) for entry in self.left_frame.grid_slaves() if isinstance(entry, tk.Entry) and entry.grid_info()['column'] == 3][::-1]
         self.get_time = self.time_entry.get()
@@ -93,15 +93,18 @@ class SignalsGUI:
  
 
     def create_plot(self):
-        self.frequency_sampling=Set_frequency_sampling(frequency_sampling=self.get_fs)
-        self.time=Set_time(time=self.get_time)
-        self.sin_list=[Create_sinuosidal_wave(frequency=self.frequencies[n], amplitude=self.amplitudes[n], time=float(self.time.t), frequency_sampling=int(self.frequency_sampling.fs)) for n in range(len( self.frequencies))]
+        self.frequency_sampling=self.get_fs
+        self.time=self.get_time
+        self.sin_list=[Sinuosidal_wave(frequency=self.frequencies[n], amplitude=self.amplitudes[n], time=float(self.time), frequency_sampling=int(self.frequency_sampling), shift=0) for n in range(len( self.frequencies))]
         self.sin_sum=sum([sin_instance.value for sin_instance  in self.sin_list])
 
+
         self.ax.clear()  # Clear plot
-        self.ax.plot(self.sin_list[0].sampling_interval_points, self.sin_sum, 'r') # Recreate plot
+        self.ax.plot(self.sin_list[0].samples, self.sin_sum, 'r') # Recreate plot
         self.ax.set_ylabel('Amplitude')
         self.canvas.draw()
+
+
 
 
     # initialization function: plot the background of each frame
@@ -123,8 +126,9 @@ class SignalsGUI:
     #     plt.show()
 
     def button_to_generate_plot(self):
-        self.get_data_for_plot()
+        self.get_data_from_symbol_for_plot()
         self.create_plot()
+
         # self.run_anime() #soon
 
     def run(self):
@@ -132,7 +136,7 @@ class SignalsGUI:
     
     def close_window(self):
         if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
-            self.root.destroy()  # Zniszczenie głównego okna
+            self.root.destroy()
             sys.exit()
 
 
