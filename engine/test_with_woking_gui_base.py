@@ -41,6 +41,7 @@ toolbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
 def init():
+    print('dupa')
     line1.set_data([], [])
     line2.set_data([], [])
     return line1, line2

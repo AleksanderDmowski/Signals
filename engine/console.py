@@ -9,7 +9,7 @@ if __name__ == '__main__':
     from math_lib import Sinuosidal_wave
 else:
     pass
-    from .math_lib import Sinuosidal_wave, Set_frequency_sampling, Set_time
+    from .math_lib import Sinuosidal_wave
 
 import matplotlib.pyplot as plt
 # from matplotlib import animation
