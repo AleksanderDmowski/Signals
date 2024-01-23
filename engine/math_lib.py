@@ -18,11 +18,11 @@ class Sinuosidal_wave():
 
     def create_value_for_anime(self, frame):
         self.frame= frame
-        x = np.linspace(0, 1, self.frequency_sampling)
+        x = np.linspace(0, 2, self.frequency_sampling)
         # self.anime = np.linspace(0, self.time*2, self.time_sampled)
         # return self.amplitude * np.sin(2*np.pi*self.frequency*self.samples*self.anime+self.shift)
         if not frame:
-            return self.amplitude * np.sin(2*np.pi*self.frequency*self.samples+self.shift)
+            return self.amplitude * np.sin(2*np.pi*self.frequency*x+self.shift)
         return self.amplitude * np.sin(2*np.pi*self.frequency*(x+0.01*self.frame)+self.shift)
     # def update_time_sampled(self, shift):
     
